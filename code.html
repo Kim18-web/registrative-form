@@ -1,0 +1,164 @@
+       <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Interactive Registration Form</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #e6dcdc;
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+    }
+
+    .container {
+        background: rgb(212, 100, 100);
+        padding: 20px;
+        width: 350px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #ccc;
+    }
+
+    h2 { text-align: center; }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label { display: block; font-weight: bold; }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 4px;
+        border: 1px solid #aaa;
+    }
+
+    .error {
+        color: red;
+        font-size: 13px;
+        height: 14px;
+    }
+
+    #successMessage {
+        display: none;
+        padding: 20px;
+        background: #d4edda;
+        color: #155724;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Registration Form</h2>
+
+    <div id="successMessage">Registration Successful! 🎉</div>
+
+    <form id="regForm">
+
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name">
+            <div class="error" id="nameError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" id="email">
+            <div class="error" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password">
+            <div class="error" id="passwordError"></div>
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('regForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    // Error fields
+    const nameErr = document.getElementById('nameError');
+    const emailErr = document.getElementById('emailError');
+    const passErr = document.getElementById('passwordError');
+
+    // Basic validation functions
+    function validateName() {
+        if (nameInput.value.trim() === "") {
+            nameErr.textContent = "Name is required";
+            return false;
+        }
+        nameErr.textContent = "";
+        return true;
+    }
+
+    function validateEmail() {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!pattern.test(emailInput.value)) {
+            emailErr.textContent = "Invalid email format";
+            return false;
+        }
+        emailErr.textContent = "";
+        return true;
+    }
+
+    function validatePassword() {
+        const pass = passwordInput.value;
+
+        if (!/[A-Z]/.test(pass) || !/[0-9]/.test(pass)) {
+            passErr.textContent = "Must contain uppercase & number";
+            return false;
+        }
+        passErr.textContent = "";
+        return true;
+    }
+
+    // EVENT HANDLING (input event + submit event)
+    nameInput.addEventListener("input", validateName);  
+    emailInput.addEventListener("input", validateEmail);  
+    passwordInput.addEventListener("input", validatePassword);
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault(); // stop normal form submission
+        
+        // Validate all
+        const validName = validateName();
+        const validEmail = validateEmail();
+        const validPass = validatePassword();
+
+        if (validName && validEmail && validPass) {
+
+            // Collect user data
+            const userData = {
+                name: nameInput.value,
+                email: emailInput.value,
+                password: passwordInput.value
+            };
+            console.log("Collected Data:", userData);
+
+            // Hide form
+            form.style.display = "none";
+
+            // Show success message
+            document.getElementById("successMessage").style.display = "block";
+        }
+    });
+</script>
+
+</body>
+</html>
